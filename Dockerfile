@@ -83,5 +83,7 @@ ENV CODEQL_CLI_ARGS=' --ram=8g '
 #RUN chown -R ${USERNAME}:${USERNAME} ${CODEQL_HOME}
 
 #USER ${USERNAME}
+# Temporary adding it to not rebuild the docker image
+COPY container /usr/local/startup_scripts/
 
 ENTRYPOINT ["python3", "/usr/local/startup_scripts/startup.py"]
