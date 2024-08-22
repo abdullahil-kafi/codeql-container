@@ -7,14 +7,14 @@ from libs.codeql import *
 CODEQL_HOME = get_env_variable('CODEQL_HOME')
 
 # should we update the local copy of codeql-cli if a new version is available?
-CHECK_LATEST_CODEQL_CLI = get_env_variable('CHECK_LATEST_CODEQL_CLI', True)
+CHECK_LATEST_CODEQL_CLI = get_env_variable('CHECK_LATEST_CODEQL_CLI', False)
 
 # should we update the local copy of codeql queries if a new version is available?
-CHECK_LATEST_QUERIES = get_env_variable('CHECK_LATEST_QUERIES', True)
+CHECK_LATEST_QUERIES = get_env_variable('CHECK_LATEST_QUERIES', False)
 
-# if we are downloading new queries, should we precompile them 
+# if we are downloading new queries, should we precompile them
 #(makes query execution faster, but building the container build slower).
-PRECOMPILE_QUERIES = get_env_variable('PRECOMPILE_QUERIES', True)
+PRECOMPILE_QUERIES = get_env_variable('PRECOMPILE_QUERIES', False)
 
 # ql packs, requested to run, if any
 CODEQL_CLI_ARGS = get_env_variable('CODEQL_CLI_ARGS', True)
@@ -34,10 +34,10 @@ def main():
         setup_script_args += ' --precompile-latest-queries'
 
     run_result = check_output_wrapper(
-        f"{scripts_dir}/setup.py {setup_script_args}", 
+        f"{scripts_dir}/setup.py {setup_script_args}",
         shell=True).decode("utf-8")
 
-    # what command did the user ask to run? 
+    # what command did the user ask to run?
     if CODEQL_CLI_ARGS == False or CODEQL_CLI_ARGS == None or CODEQL_CLI_ARGS == ' ':
         # nothing to do
         logger.info("No argument passed in for codeql-cli, nothing to do. To perform some task, please set the CODEQL_CLI_ARGS environment variable to a valid argument...")
@@ -45,7 +45,7 @@ def main():
         codeql = CodeQL(CODEQL_HOME)
         run_result = codeql.execute_codeql_command(CODEQL_CLI_ARGS)
         print(run_result)
-        
+
     if WAIT_AFTER_EXEC:
         logger.info("Wait forever specified, waiting...")
         while True:

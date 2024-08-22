@@ -4,39 +4,39 @@ LABEL maintainer="Github codeql team"
 # tzdata install needs to be non-interactive
 ENV DEBIAN_FRONTEND=noninteractive
 
-ARG USERNAME=codeql
+#ARG USERNAME=codeql
 ENV CODEQL_HOME /usr/local/codeql-home
 
-# create user, install/update basics and python
-RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
-    apt-get update && \
+# install/update basics and python
+RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-    	software-properties-common \
-        nodejs \
-    	vim \
-    	curl \
-    	wget \
-    	git \
-    	build-essential \
-    	unzip \
-    	apt-transport-https \
-        python3.10 \
-    	python3-venv \
-    	python3-pip \
-    	python3-setuptools \
-        python3-dev \
-        python-is-python3 \
-    	gnupg \
-    	g++ \
-    	make \
-    	gcc \
-    	apt-utils \
-        rsync \
-    	file \
-        dos2unix \
-    	gettext && \
-        apt-get clean
+    software-properties-common \
+    nodejs \
+    vim \
+    curl \
+    wget \
+    git \
+    build-essential \
+    ant \
+    unzip \
+    apt-transport-https \
+    python3.10 \
+    python3-venv \
+    python3-pip \
+    python3-setuptools \
+    python3-dev \
+    python-is-python3 \
+    gnupg \
+    g++ \
+    make \
+    gcc \
+    apt-utils \
+    rsync \
+    file \
+    dos2unix \
+    gettext && \
+    apt-get clean
 
 # Install .NET Core and Java for tools/builds
 RUN cd /tmp && \
@@ -74,13 +74,14 @@ RUN CODEQL_VERSION=$(cat /tmp/codeql_version) && \
 ENV PATH="${CODEQL_HOME}/codeql:${PATH}"
 
 # Pre-compile our queries to save time later
-RUN codeql query compile --threads=0 ${CODEQL_HOME}/codeql-repo/*/ql/src/codeql-suites/*.qls --additional-packs=.
+RUN codeql query compile --threads=8 ${CODEQL_HOME}/codeql-repo/*/ql/src/codeql-suites/*.qls --additional-packs=.
 
 ENV PYTHONIOENCODING=utf-8
+ENV CODEQL_CLI_ARGS=' --ram=8g '
 
 # Change ownership of all files and directories within CODEQL_HOME to the codeql user
 #RUN chown -R ${USERNAME}:${USERNAME} ${CODEQL_HOME}
 
-USER ${USERNAME}
+#USER ${USERNAME}
 
-ENTRYPOINT ["python3", "/usr/local/startup_scripts/startup.py"] 
+ENTRYPOINT ["python3", "/usr/local/startup_scripts/startup.py"]
