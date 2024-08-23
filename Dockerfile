@@ -77,7 +77,8 @@ ENV PATH="${CODEQL_HOME}/codeql:${PATH}"
 RUN codeql query compile --threads=8 ${CODEQL_HOME}/codeql-repo/*/ql/src/codeql-suites/*.qls --additional-packs=.
 
 ENV PYTHONIOENCODING=utf-8
-ENV CODEQL_CLI_ARGS=' --ram=10g '
+ENV CODEQL_CLI_ARGS=' --ram=8g '
+COPY container /usr/local/startup_scripts/
 RUN chmod +x /usr/local/startup_scripts/setup.py
 
 # Change ownership of all files and directories within CODEQL_HOME to the codeql user

@@ -16,13 +16,13 @@ def parse_arguments():
 
     parser = argparse.ArgumentParser(description='Setup codeql components.')
     # should we update the local copy of codeql-cli if a new version is available?
-    parser.add_argument("-c", "--check-latest-cli", help="check the latest codeql-cli package available and install it", 
+    parser.add_argument("-c", "--check-latest-cli", help="check the latest codeql-cli package available and install it",
                         default=False, action="store_true")
     # should we update the local copy of codeql queries if a new version is available?
     parser.add_argument("-q", "--check-latest-queries", help="check the latest codeql queries available and install it",
                         default=False, action="store_true")
     #(makes query execution faster, but building the container build slower).
-    parser.add_argument("-p", "--precompile-latest-queries", help="if new queries were downloaded, precompile it",    
+    parser.add_argument("-p", "--precompile-latest-queries", help="if new queries were downloaded, precompile it",
                         default=False, action="store_true")
 
     args = parser.parse_args()
@@ -51,10 +51,11 @@ def get_latest_codeql(args):
             codeql.download_and_install_latest_codeql(latest_online_version)
     # get the latest queries regardless (TODO: Optimize by storing and checking the last commit hash?)
     if args.check_latest_queries:
-        codeql.download_and_install_latest_codeql_queries()
+        # codeql.download_and_install_latest_codeql_queries()
+        logger.info("skip checking latest queries")
     if args.precompile_latest_queries:
-        codeql.precompile_queries()
+        # codeql.precompile_queries()
+        logger.info("skip precompiling new queries")
 
 logger = get_logger()
 setup()
-
