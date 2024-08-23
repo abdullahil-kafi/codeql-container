@@ -60,7 +60,7 @@ else
 fi
 
 print_yellow "\nRunning the Quality and Security rules on the project"
-docker run --rm --name codeql-container -v ${inputfile}:/opt/src -v ${outputfile}:/opt/results -e CODEQL_CLI_ARGS=database\ analyze\ /opt/results/source_db\ --ram=8g\ --format=sarifv2\ --output=/opt/results/issues.sarif\ ${language}-security-and-quality.qls ${DOCKER_IMAGE}
+docker run --rm --name codeql-container -v ${inputfile}:/opt/src -v ${outputfile}:/opt/results -e CODEQL_CLI_ARGS=database\ analyze\ /opt/results/source_db\ --ram=8196\ --format=sarifv2\ --output=/opt/results/issues.sarif\ ${language}-security-and-quality.qls ${DOCKER_IMAGE}
 if [ $? -eq 0 ]
 then
     print_green "\nQuery execution successful"
