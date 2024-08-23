@@ -51,6 +51,7 @@ RUN apt-get install -y dotnet-sdk-6.0
 # Clone our setup and run scripts
 RUN mkdir -p /usr/local/startup_scripts
 COPY container /usr/local/startup_scripts/
+RUN chmod +x /usr/local/startup_scripts/setup.py
 
 RUN pip3 install -r /usr/local/startup_scripts/requirements.txt
 
@@ -78,8 +79,6 @@ RUN codeql query compile --threads=8 ${CODEQL_HOME}/codeql-repo/*/ql/src/codeql-
 
 ENV PYTHONIOENCODING=utf-8
 ENV CODEQL_CLI_ARGS=' --ram=8g '
-COPY container /usr/local/startup_scripts/
-RUN chmod +x /usr/local/startup_scripts/setup.py
 
 # Change ownership of all files and directories within CODEQL_HOME to the codeql user
 #RUN chown -R ${USERNAME}:${USERNAME} ${CODEQL_HOME}
